@@ -1,0 +1,27 @@
+# Logs
+logs
+*.log
+*.log.*
+
+# js.map
+*.js.map
+
+# Bundle
+/client/dist/bundle.js
+/client/dist/bundle.js.map
+
+# Compiled binary addons (http://nodejs.org/api/addons.html)
+build/Release
+
+# Dependency directory
+# Commenting this out is preferred by some people, see
+# https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
+node_modules
+
+# Users Environment Variables
+.lock-wscript
+
+# Runtime configuration for swagger app
+config/runtime.yaml
+
+.DS_Store
