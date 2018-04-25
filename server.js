@@ -6,6 +6,7 @@ import morgan from 'morgan';
 // We gotta import our models and routes
 import Shop from './app/models/shop';
 import { getShops, getShop } from './app/routes/shop';
+import { signup, login, verifyAuth } from './app/routes/user';
 
 const app = express(); // Our express server!
 const port = process.env.PORT || 8080;
@@ -40,11 +41,17 @@ app.use((req, res, next) => {
 
 // API routes
 
+// login route
+app.post('/auth/login', login);
+
+// signup route
+app.post('/auth/signup', signup);
+
 // get all the shops
-app.get('/shops', getShops)
+app.get('/shops', verifyAuth, getShops)
 
 // get a single shop
-app.get('/shops/:id', getShop)
+app.get('/shops/:id', verifyAuth, getShop)
 
 
 

@@ -10,7 +10,7 @@ const getShops = (req, res) => {
                     $nearSphere: coords,
                     $maxDistance: maxDist/6371
                     }                
-                }, null, { sort: { name : 1 } }, (err, shops) => {
+                }, null, (err, shops) => {
         if (err) {
             res.send(err);
         }
