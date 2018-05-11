@@ -48,10 +48,10 @@ app.post('/auth/login', login);
 app.post('/auth/signup', signup);
 
 // get all the shops
-app.get('/shops', verifyAuth, getShops)
+app.get('/shops', getShops)
 
 // get a single shop
-app.get('/shops/:id', verifyAuth, getShop)
+app.get('/shops/:id', getShop)
 
 
 

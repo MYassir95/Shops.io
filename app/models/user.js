@@ -7,7 +7,6 @@ import bcrypt from 'bcryptjs';
 var userSchema = new mongoose.Schema({
   email: { type: String, unique: true, lowercase: true },
   password: { type: String, select: false },
-  name: String
 });
 
 userSchema.pre('save', function (next) {

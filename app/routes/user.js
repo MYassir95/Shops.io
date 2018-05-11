@@ -1,4 +1,4 @@
-// Our new dependencies
+// Dependencies
 import jwt from 'jsonwebtoken';
 import moment from 'moment';
 // We import the User model we have just defined
@@ -32,8 +32,8 @@ const signup = (req, res) => {
       }
       // Notice we also send the token as we want the user to be immediately logged in
       res.json({
-        message: 'Welcome to Retrogames, you are now logged in',
-        token: createToken(result.name)
+        message: 'Welcome to Shops.io, you are now logged in',
+        token: createToken(result.email)
       });
     });
   });
@@ -56,7 +56,7 @@ const login = (req, res) => {
         return res.status(401).send({ message: 'Invalid email/password' });
       }
       // Correct information from the client, a token is sent
-      res.json({ message: 'You are now logged in', token: createToken(user.name) });
+      res.json({ message: 'You are now logged in', token: createToken(user.email) });
     });
   });
 };

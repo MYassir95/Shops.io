@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { ShopsListManager } from '../components';
+import { hashHistory } from 'react-router';
+import Auth from '../modules/Auth';
 
 export default class ShopsContainer extends Component {
   constructor (props) {
@@ -11,6 +13,7 @@ export default class ShopsContainer extends Component {
     //this.dislike = this.dislike.bind(this);
     this.setSearchBar = this.setSearchBar.bind(this);
     this.setMaxDist = this.setMaxDist.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
   // Once the component mounted it fetches the data from the server
@@ -24,7 +27,6 @@ export default class ShopsContainer extends Component {
                                                                   lat: location.coords.latitude.toFixed(5),
                                                                   maxDist: maxDist};
       Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-      console.log(url);
       fetch(url)
       .then(response => response.json()) // The json response to object literal
       .then(data => this.setState({ shops: data }));
@@ -32,13 +34,16 @@ export default class ShopsContainer extends Component {
   }
   
   setMaxDist (event) {
-    console.log("change");
     this.getShops(event.target.value);
   }
 
   setSearchBar (event) { 
-    // Super still filters super mario thanks to toLowerCase
     this.setState({ searchBar: event.target.value.toLowerCase() });
+  }
+
+  logout (event) {
+    Auth.deauthenticateUser();
+    hashHistory.push('/login');
   }
 
   render () {
@@ -50,6 +55,7 @@ export default class ShopsContainer extends Component {
           searchBar={searchBar}
           setSearchBar={this.setSearchBar}
           setMaxDist={this.setMaxDist}
+          logout={this.logout}
         />
       </div>
     );

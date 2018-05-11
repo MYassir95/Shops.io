@@ -5,6 +5,8 @@ import ShopsListManager from './ShopsListManager';
 import Home from './Home';
 import Listing from './Listing';
 import Welcome from './Welcome';
+import LoginForm from './LoginForm'
+import SignupForm from './SignupForm'
 
 // We export all the components at once
 export {
@@ -14,5 +16,7 @@ export {
   ShopsListManager,
   Home,
   Listing,
-  Welcome
+  Welcome,
+  LoginForm,
+  SignupForm
 };

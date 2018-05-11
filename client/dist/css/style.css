@@ -211,6 +211,15 @@ nav {
   color: white;
   border: 1px solid white;
 }
+.btn-logout {
+  background-color: #d9534f;
+  color: white;
+  position:absolute;
+  top:0;
+  right:0;
+  margin-top:2em;
+  margin-right:28em;
+}
 .lead .btn:hover, .btn-submit:hover {
   background-color: orange;
   color:white;

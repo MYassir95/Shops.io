@@ -4,9 +4,10 @@ import Shop from './Shop';
 
 export default class ShopsListManager extends PureComponent {
   render () {
-    const { shops, searchBar, setMaxDist, setSearchBar } = this.props;
+    const { shops, searchBar, setMaxDist, setSearchBar, logout } = this.props;
     return (
       <div className = "container">
+        <button type="button" className="btn btn-logout" onClick={logout}>Logout</button>
         <div className="row options">
             <input
               type="search" placeholder="Search by Name" className="form-control search-bar" onKeyUp={setSearchBar} />
@@ -19,7 +20,6 @@ export default class ShopsListManager extends PureComponent {
         <div className="row container scrollable">
           <div className="row">
           {
-      // A Game is only shown if its name contains the string from the searchBar
             shops
               .filter(shop => shop.name.toLowerCase().includes(searchBar))
               .map((shop, i) => {
