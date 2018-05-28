@@ -38,8 +38,12 @@ export default class LoginPage extends Component {
             .post('/auth/login')
             .send({email:this.state.user.email, password:this.state.user.password})
             .end((err, res) => {
-                if(err) { this.setState({errorMessage: "Authentication Failed"}); return;}
-                Auth.authenticateUser(res.body.token);
+                if(err) { 
+                    this.setState({errorMessage: "Authentication Failed"});
+                    window.alert("Your email/password is incorrect");
+                    return;
+                }
+                Auth.authenticateUser(res.body.token, res.body.id);
                 hashHistory.push('/');
             });
     }

@@ -2,11 +2,13 @@
 import mongoose from 'mongoose';
 var Schema = mongoose.Schema;
 import bcrypt from 'bcryptjs';
+import Shop from '../models/shop';
 
 // Our schema defines 3 fields, notice email must be unique
-var userSchema = new mongoose.Schema({
+
+var userSchema = new Schema({
   email: { type: String, unique: true, lowercase: true },
-  password: { type: String, select: false },
+  password: { type: String, select: false }
 });
 
 userSchema.pre('save', function (next) {

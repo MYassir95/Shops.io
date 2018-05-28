@@ -1,21 +1,22 @@
 import React, { PureComponent } from 'react';
-import { Link } from 'react-router';
+import { Link, withRouter } from 'react-router';
 import Shop from './Shop';
 
-export default class ShopsListManager extends PureComponent {
+class ShopsListManager extends PureComponent {
   render () {
-    const { shops, searchBar, setMaxDist, setSearchBar, logout } = this.props;
+    const { shops, maxDist, searchBar, setMaxDist, setSearchBar, likeShop, dislikeShop, removeShop } = this.props;
     return (
       <div className = "container">
-        <button type="button" className="btn btn-logout" onClick={logout}>Logout</button>
         <div className="row options">
             <input
               type="search" placeholder="Search by Name" className="form-control search-bar" onKeyUp={setSearchBar} />
-            <select className="form-control selectpicker" title="Search Radius (in km)" data-style="btn-primary" onChange={setMaxDist}>
-              <option>5</option>
-              <option>10</option>
-              <option>20</option>
-            </select>
+            { this.props.location.pathname==='/' &&
+            <select className="form-control selectpicker" data-style="btn-primary" onChange={setMaxDist}>
+              <option value="1000">Search Radius (in km)</option>
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+            </select> }
         </div>
         <div className="row container scrollable">
           <div className="row">
@@ -27,6 +28,9 @@ export default class ShopsListManager extends PureComponent {
                   <Shop  {...shop}
                     key={shop._id}
                     i={i}
+                    likeShop={likeShop}
+                    dislikeShop={dislikeShop}
+                    removeShop={removeShop}
                   />
                 );
               })
@@ -38,3 +42,5 @@ export default class ShopsListManager extends PureComponent {
     );
   }
 }
+
+export default withRouter(ShopsListManager);

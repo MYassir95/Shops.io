@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
-import { Link } from 'react-router';
+import { Link, withRouter } from 'react-router';
 
-export default class Shop extends PureComponent {
+class Shop extends PureComponent {
   render () {
-    const { _id, name, picture } = this.props;
+    const { _id, name, picture, likeShop, dislikeShop, removeShop } = this.props;
     return (
       <div className="col-md-4">
         <div className="thumbnail">
@@ -13,8 +13,9 @@ export default class Shop extends PureComponent {
           <div className="caption">
             <h5>{name}</h5>
             <div className="btn-group" role="group" aria-label="...">
-              <button className="btn btn-success" role="button">Like</button>
-              <button className="btn btn-danger" role="button">Dislike</button>
+              {this.props.location.pathname==="/" && <button className="btn btn-success" role="button" onClick={() => likeShop(_id)}>Like</button>}
+              {this.props.location.pathname==="/" && <button className="btn btn-danger" role="button" onClick={() => dislikeShop(_id)}>Dislike</button>}
+              {this.props.location.pathname==="/preferred" && <button className="btn btn-danger" role="button" onClick={() => removeShop(_id)}>Remove</button>}
             </div>
           </div>
         </div>
@@ -22,3 +23,5 @@ export default class Shop extends PureComponent {
     );
   }
 }
+
+export default withRouter(Shop);

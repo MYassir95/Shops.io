@@ -7,25 +7,43 @@ export default class ShopsContainer extends Component {
   constructor (props) {
     super(props);
     // The initial state
-    this.state = { shops: [], selectedShop: {}, searchBar: '' };
+    this.state = { shops: [], maxDist:'', searchBar: '' };
     // Bind the functions to this (context) 
-    //this.like = this.like.bind(this);
-    //this.dislike = this.dislike.bind(this);
     this.setSearchBar = this.setSearchBar.bind(this);
     this.setMaxDist = this.setMaxDist.bind(this);
-    this.logout = this.logout.bind(this);
+    this.likeShop = this.likeShop.bind(this);
+    this.dislikeShop = this.dislikeShop.bind(this);
+    this.removeShop = this.removeShop.bind(this);
   }
 
+  // We make sure the user is logged in before he can access the main page
+  componentWillMount() { 
+    if(!Auth.isUserAuthenticated()) { 
+       hashHistory.push('/login'); 
+    } 
+  }
+  
   // Once the component mounted it fetches the data from the server
   componentDidMount () {
-    this.getShops();
+    switch(this.props.location.pathname) {
+      case "/":
+        this.getNearbyShops();
+        break;
+      case "/preferred":
+        this.getPreferredShops();
+    }
   }
 
-  getShops (maxDist = 5) {
+  // Returns a list of the shops that are within a radius of maxDist or 1000km if maxDist is not specified
+  getNearbyShops () {
     navigator.geolocation.getCurrentPosition(location => {
-      var url = new URL('http://localhost:8080/shops'), params = {lng: location.coords.longitude.toFixed(5),
-                                                                  lat: location.coords.latitude.toFixed(5),
-                                                                  maxDist: maxDist};
+      var url = new URL('http://localhost:8080/nearbyShops');
+      var params = {
+        lng: location.coords.longitude.toFixed(5),
+        lat: location.coords.latitude.toFixed(5),
+        maxDist: this.state.maxDist || 1000,
+        userId: localStorage.id
+      };
       Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
       fetch(url)
       .then(response => response.json()) // The json response to object literal
@@ -33,29 +51,74 @@ export default class ShopsContainer extends Component {
     }); 
   }
   
+  // Fetches a user's preferred shops
+  getPreferredShops () {
+      var url = new URL('http://localhost:8080/preferredShops');
+      var params = { userId: localStorage.id };
+      Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+      fetch(url)
+      .then(response => response.json()) // The json response to object literal
+      .then(data => this.setState({ shops: data }));
+  }
+  
   setMaxDist (event) {
-    this.getShops(event.target.value);
+    this.setState({ maxDist: event.target.value });
+    this.getNearbyShops();
   }
 
   setSearchBar (event) { 
     this.setState({ searchBar: event.target.value.toLowerCase() });
   }
 
-  logout (event) {
-    Auth.deauthenticateUser();
-    hashHistory.push('/login');
+  // Handles a user liking/disliking a shop
+  interactWithShop(id, url) {
+    fetch(url, {
+      headers: new Headers({
+        'Content-Type': 'application/json',
+      }),
+      body: JSON.stringify({"shopId": id, "userId": localStorage.id}),
+      method: 'POST',
+    }).then(response => {
+      console.log(response.message);
+    });
+    this.getNearbyShops();
+  }
+
+  likeShop(id) {
+    this.interactWithShop(id,new URL(`http://localhost:8080/like`));
+  }
+
+  dislikeShop(id) {
+    this.interactWithShop(id,new URL(`http://localhost:8080/dislike`));
+  }
+
+  // Removes a shop from the preferred shops list
+  removeShop(id) {
+    fetch(`http://localhost:8080/remove`, {
+      headers: new Headers({
+        'Content-Type': 'application/json',
+      }),
+      body: JSON.stringify({"userId": localStorage.id, "shopId": id}),
+      method: 'DELETE',
+    }).then(response => {
+      console.log(response.message);
+    });
+    this.getPreferredShops();
   }
 
   render () {
-    const { shops, selectedShop, searchBar } = this.state;
+    const { shops, maxDist, searchBar } = this.state;
     return (
       <div>
         <ShopsListManager
           shops={shops}
+          maxDist={maxDist}
           searchBar={searchBar}
           setSearchBar={this.setSearchBar}
           setMaxDist={this.setMaxDist}
-          logout={this.logout}
+          likeShop={this.likeShop}
+          dislikeShop={this.dislikeShop}
+          removeShop={this.removeShop}
         />
       </div>
     );

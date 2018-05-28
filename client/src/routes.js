@@ -1,18 +1,19 @@
 import React from 'react';
-import { Router, Route, hashHistory, IndexRoute } from 'react-router';
-import { ShopsContainer, LoginPage, SignupPage } from './containers';
+import { Router, Route, hashHistory, IndexRoute, withRouter } from 'react-router';
+import { ShopsContainer, LoginPage, SignupPage, PreferredShopsContainer } from './containers';
 import { Listing } from './components';
-import { RequireAuth } from './wrappers/RequireAuth';
 import Auth from './modules/Auth'
 
 // Use hashHistory for easier development
 const routes = (
   <Router history={hashHistory}>
     <Route path="/" component={Listing}>
-      <IndexRoute component={RequireAuth(ShopsContainer)}/>
+      <IndexRoute component={withRouter(ShopsContainer)}/>
       <Route path="login" component={LoginPage}/>
       <Route path="signup" component={SignupPage}/>
-    </Route>
+      <Route path="logout" onEnter={(nextState) => {Auth.deauthenticateUser(); hashHistory.push('/login');}}/>
+      <Route path="preferred" component={ShopsContainer}/>
+    </Route>    
   </Router>
 );
 

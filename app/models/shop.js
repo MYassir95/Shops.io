@@ -1,6 +1,9 @@
 // Dependencies
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
+import User from '../models/user';
+import Dislike from '../models/dislike';
+import Llike from '../models/like';
 
 // Our schema definition
 const shopSchema = new Schema(
@@ -12,7 +15,9 @@ const shopSchema = new Schema(
         location: {
             type: {type: String},
             coordinates: [Number],
-        }
+        },
+        likes: [{ type: Schema.Types.ObjectId, ref: 'Like' }],
+        dislikes:[{type: Schema.Types.ObjectId, ref: 'Dislike'}]
     }
 );
 

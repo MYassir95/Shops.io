@@ -33,7 +33,8 @@ const signup = (req, res) => {
       // Notice we also send the token as we want the user to be immediately logged in
       res.json({
         message: 'Welcome to Shops.io, you are now logged in',
-        token: createToken(result.email)
+        token: createToken(result.email),
+        id: result._id
       });
     });
   });
@@ -53,42 +54,16 @@ const login = (req, res) => {
     user.comparePwd(req.body.password, (err, isMatch) => {
       if (!isMatch) {
     // In case of wrong password, we send another HTTP 401 status
-        return res.status(401).send({ message: 'Invalid email/password' });
+        return res.status(401).json({ message: 'Invalid email/password' });
       }
       // Correct information from the client, a token is sent
-      res.json({ message: 'You are now logged in', token: createToken(user.email) });
+      res.json({ message: 'You are now logged in', token: createToken(user.email), id: user._id });
     });
   });
-};
-
-// verifyAuth middleware to protect post and delete routes
-const verifyAuth = (req, res, next) => {
-  // Get the token from the header x-access-token
-  const token = req.headers['x-access-token'];
-  if (token) {
-    // Verifies the token and the expiration
-    jwt.verify(token, config.TOKEN_SECRET, function(err, payload) {
-      // If the verification fails it returns http status 403
-      if (err) {
-        return res.status(403).send({
-          message: 'Failed to authenticate token.'
-        });
-      } else {
-        // Goes to the next route since there are no errors
-        next();
-      }
-    });
-  } else {
-    // Requests without token return http status 403
-    return res.status(403).send({
-        message: 'No token provided.'
-    });
-  }
 };
 
 // Export the functions for server.js
 export {
   signup,
-  login,
-  verifyAuth
+  login
 };

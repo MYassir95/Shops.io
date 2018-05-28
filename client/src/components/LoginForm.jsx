@@ -4,25 +4,24 @@ import { Link } from 'react-router';
 export default class LoginForm extends Component {
   render () {
     const { user, handleChange, submit  } = this.props;
-    console.log(this.props);
     return (
         <div className="row">
 		    <div className="col-md-offset-2 col-md-8">
 				<div className="panel panel-default">
 					<div className="panel-heading">
 						<h2 className="panel-title text-center">
-							 Login
+							Login
 						</h2>
 					</div>
                     <div className="panel-body">
                         <form>
                             <div className="form-group text-left">
-                                <label htmlFor="name">Name</label>
+                                <label htmlFor="name">Email</label>
                                 <input
                                     name="email"
                                     type="text"
                                     className="form-control"
-                                    placeholder="Enter the name"
+                                    placeholder="Enter your email"
                                     value={user.email}
                                     onChange={handleChange}
                                     />

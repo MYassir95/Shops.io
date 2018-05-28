@@ -5,7 +5,7 @@ import morgan from 'morgan';
 
 // We gotta import our models and routes
 import Shop from './app/models/shop';
-import { getShops, getShop } from './app/routes/shop';
+import { getNearbyShops, getPreferredShops, likeShop, dislikeShop, removeShop } from './app/routes/shop';
 import { signup, login, verifyAuth } from './app/routes/user';
 
 const app = express(); // Our express server!
@@ -47,13 +47,20 @@ app.post('/auth/login', login);
 // signup route
 app.post('/auth/signup', signup);
 
-// get all the shops
-app.get('/shops', getShops)
+// get all nearby shops
+app.get('/nearbyShops', getNearbyShops);
 
-// get a single shop
-app.get('/shops/:id', getShop)
+// get preferred shops
+app.get('/preferredShops', getPreferredShops);
 
+// like a shop
+app.post('/like', likeShop);
 
+// dislike a shop
+app.post('/dislike', dislikeShop);
+
+// remove a shop from preferred shops
+app.delete('/remove', removeShop);
 
 // ...For all the other requests just sends back the Homepage
 app.route("*").get((req, res) => {

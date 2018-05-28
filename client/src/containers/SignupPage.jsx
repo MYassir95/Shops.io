@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Auth from '../modules/Auth';
 import { SignupForm } from '../components';
-import { Link } from 'react-router';
+import { Link, hashHistory } from 'react-router';
 import superagent from 'superagent';
 
 export default class SignupPage extends Component {
@@ -31,15 +31,19 @@ export default class SignupPage extends Component {
         });
     }
 
-    //handles user login
+    //handles user signup
     submit(event) {
         event.preventDefault();
         superagent
             .post('/auth/signup')
             .send({email:this.state.user.email, password:this.state.user.password})
             .end((err, res) => {
-                if(err) { this.setState({errorMessage: "Authentication Failed"}); return;}
-                Auth.authenticateUser(res.body.token);
+                if(res.status===409) {
+                    this.setState({errorMessage: "Email already exists"});
+                    window.alert("A user with this email already exists");
+                    return;
+                }
+                Auth.authenticateUser(res.body.token, res.body.id);
                 hashHistory.push('/');
             });
     }
