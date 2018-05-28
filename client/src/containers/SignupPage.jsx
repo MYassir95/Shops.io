@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Auth from '../modules/Auth';
 import { SignupForm } from '../components';
 import { Link, hashHistory } from 'react-router';
-import superagent from 'superagent';
 
 export default class SignupPage extends Component {
     constructor(props) {
@@ -34,18 +33,23 @@ export default class SignupPage extends Component {
     //handles user signup
     submit(event) {
         event.preventDefault();
-        superagent
-            .post('/auth/signup')
-            .send({email:this.state.user.email, password:this.state.user.password})
-            .end((err, res) => {
-                if(res.status===409) {
-                    this.setState({errorMessage: "Email already exists"});
-                    window.alert("A user with this email already exists");
-                    return;
-                }
-                Auth.authenticateUser(res.body.token, res.body.id);
-                hashHistory.push('/');
-            });
+        fetch(`http://localhost:8080/auth/signup`, {
+            headers: new Headers({
+              'Content-Type': 'application/json',
+            }),
+            body: JSON.stringify({"email": this.state.user.email, "password": this.state.user.password}),
+            method: 'POST'
+        })
+        .then(response => response.json())
+        .then(response => {
+            if(response.message=='Email is already taken') {
+                this.setState({errorMessage: response.message});
+                window.alert('A user with this email already exists');
+                return;
+            }
+            Auth.authenticateUser(response.token, response.id);
+            hashHistory.push('/');
+        });
     }
 
     render() {
