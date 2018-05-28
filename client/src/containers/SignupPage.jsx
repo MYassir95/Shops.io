@@ -19,6 +19,12 @@ export default class SignupPage extends Component {
         this.submit = this.submit.bind(this);
     }
 
+    componentWillMount() {
+        if(Auth.isUserAuthenticated()) {
+            hashHistory.push('/');
+        }
+    }
+
     //handles changes to the user object
     handleChange(event) {
         const field = event.target.name;
