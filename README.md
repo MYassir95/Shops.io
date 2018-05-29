@@ -42,48 +42,46 @@ And if you don't have *yarn* installed, go ahead and install it.
 
 From npm:
 
-  ```
-
+```
 npm install yarn -g
-
 ```
 
 Then in the root folder run:
-```
 
+```
 yarn
-
 ```
+
 Download the MongoDB dump that contains the shops database [here](https://github.com/hiddenfounders/web-coding-challenge/blob/master/dump-shops.zip), extract it and then run the following command
-```
 
+```
 mongorestore --db shops shops/
-
 ```
+
 Start the mongod process by running the following command
-```
 
+```
 mongod.exe
-
-```
-To run the app first start the server by running this command in the root folder
 ```
 
+To run the app first start the server by running this command in the root folder. Don't forget to replace the value of the connection string in the server.js file at line 21 with your MongoDB connection string.
+
+```
 yarn api
-
-```
-You can run the client on the dev server using the following command
 ```
 
+You can run the client on the dev server using the following command you can then access the application at http://localhost:3000
+
+```
 yarn start
-
-```
-Or you can skip it and run the client on the production server by running
 ```
 
+Or you can skip it and run the client on the production server by running and accessing the application at http://localhost:8080
+
+```
 yarn build
-
 ```
+
 ## Known Issues
 
 On refreshing the nearby shops page the search radius selectpicker renders two dropdowns menus. Going to the preferred shops page and returning to the nearby shops page doesn't have the same effect.
