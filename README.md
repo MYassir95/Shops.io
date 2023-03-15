@@ -3,8 +3,6 @@
 
 >React application that allows the users to look for shops within a set radius.
 
-This is my submission for the Hidden Founders' web coding challenge.
-
 ## Usage
 
 First, you must signup or login if you have already signed up.
